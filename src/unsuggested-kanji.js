@@ -9,7 +9,8 @@ function validateSentence(sentence) {
         isNashi(token) ||
         isAri(token) ||
         isEru(token) ||
-        isOmune(token)
+        isOmune(token) ||
+        isAgeru(token)
         ) {
       addError('推奨しない漢字が「' + token.surface + '」で使われています。', sentence);
     }
@@ -125,6 +126,15 @@ function isOmune(token) {
   if (token.tags[6] === '概ね' &&
       token.tags[0] === '副詞' &&
       token.tags[1] === '一般') {
+    return true;
+  }
+  return false;
+}
+
+function isAgeru(token) {
+  if (token.tags[6] === '上げる' &&
+      token.tags[0] === '動詞' &&
+      token.tags[1] === '非自立') {
     return true;
   }
   return false;
