@@ -19,7 +19,7 @@ import cc.redpen.parser.SentenceExtractor;
  */
 class UnsuggestedKanjiTest {
   def vc = new ValidatorConfiguration("JavaScript")
-              .addAttribute("script-path", System.getProperty("user.dir") + /\src/)
+              .addAttribute("script-path", System.getProperty("user.dir") + File.separator  + "src")
   def conf = new Configuration.ConfigurationBuilder()
                               .addValidatorConfig(vc)
                               .setLanguage("ja")
