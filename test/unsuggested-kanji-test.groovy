@@ -36,10 +36,10 @@ class UnsuggestedKanjiTest {
   }
   
   @Test 
-  void test_check_–() {
+  void test_check_äº‹() {
     // setup
     def parser = DocumentParser.PLAIN
-    def doc = parser.parse("’m‚ç‚È‚¢–‚ª‚ ‚éB", 
+    def doc = parser.parse("çŸ¥ã‚‰ãªã„äº‹ãŒã‚ã‚‹ã€‚", 
                            new SentenceExtractor(conf.getSymbolTable()),
                            conf.getTokenizer())
      
@@ -48,7 +48,21 @@ class UnsuggestedKanjiTest {
      
     // verify
     assertThat errors.size(), is(1)
-    assertThat errors.get(0).getMessage(), is("[unsuggested-kanji.js] „§‚µ‚È‚¢Š¿š‚ªu–v‚Åg‚í‚ê‚Ä‚¢‚Ü‚·B")
-
+    assertThat errors.get(0).getMessage(), is("[unsuggested-kanji.js] æ¨å¥¨ã—ãªã„æ¼¢å­—ãŒã€Œäº‹ã€ã§ä½¿ã‚ã‚Œã¦ã„ã¾ã™ã€‚")
+  }
+  
+    @Test 
+  void test_not_check_äº‹() {
+    // setup
+    def parser = DocumentParser.PLAIN
+    def doc = parser.parse("ä»•äº‹ãŒã‚ã‚‹ã€‚æ™‚äº‹å•é¡Œã€‚äº‹ã‚’æ€¥ãã€‚æ€¥ã„ã¦ã¯äº‹ã‚’ã—æã˜ã‚‹ã€‚", 
+                           new SentenceExtractor(conf.getSymbolTable()),
+                           conf.getTokenizer())
+     
+    // exercise
+    def errors = (new RedPen(conf)).validate([doc]).get(doc)
+     
+    // verify
+    assertThat errors.size(), is(0)
   }
 }
