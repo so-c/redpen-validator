@@ -51,11 +51,43 @@ class UnsuggestedKanjiTest {
     assertThat errors.get(0).getMessage(), is("[unsuggested-kanji.js] 推奨しない漢字が「事」で使われています。")
   }
   
-    @Test 
+  @Test 
   void test_not_check_事() {
     // setup
     def parser = DocumentParser.PLAIN
     def doc = parser.parse("仕事がある。時事問題。事を急ぐ。急いては事をし損じる。", 
+                           new SentenceExtractor(conf.getSymbolTable()),
+                           conf.getTokenizer())
+     
+    // exercise
+    def errors = (new RedPen(conf)).validate([doc]).get(doc)
+     
+    // verify
+    assertThat errors.size(), is(0)
+  }
+  
+  @Test 
+  void test_check_得る() {
+    // setup
+    def parser = DocumentParser.PLAIN
+    def doc = parser.parse("そんなことは有り得ない。達成し得ない目標。", 
+                           new SentenceExtractor(conf.getSymbolTable()),
+                           conf.getTokenizer())
+     
+    // exercise
+    def errors = (new RedPen(conf)).validate([doc]).get(doc)
+     
+    // verify
+    assertThat errors.size(), is(2)
+    assertThat errors.get(0).getMessage(), is("[unsuggested-kanji.js] 推奨しない漢字が「有り得」で使われています。")
+    assertThat errors.get(1).getMessage(), is("[unsuggested-kanji.js] 推奨しない漢字が「得」で使われています。")
+  }
+  
+  @Test 
+  void test_not_check_得る() {
+    // setup
+    def parser = DocumentParser.PLAIN
+    def doc = parser.parse("やむを得ず諦める。知識を得る。", 
                            new SentenceExtractor(conf.getSymbolTable()),
                            conf.getTokenizer())
      

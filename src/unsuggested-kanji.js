@@ -110,9 +110,6 @@ function isEru(token) {
   if ((token.tags[6] === '得る' &&
        token.tags[0] === '動詞' &&
        token.tags[1] === '非自立') ||
-      (token.tags[6] === 'やむを得ない' &&
-       token.tags[0] === '形容詞' &&
-       token.tags[1] === '自立') ||
       (token.tags[6] === '有り得る' &&
        token.tags[0] === '動詞' &&
        token.tags[1] === '自立')
