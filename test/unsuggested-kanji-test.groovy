@@ -67,6 +67,38 @@ class UnsuggestedKanjiTest {
   }
   
   @Test 
+  void test_check_通り() {
+    // setup
+    def parser = DocumentParser.PLAIN
+    def doc = parser.parse("言う通りにする。通りの名前を言う。",  // 2つ目の「通り」は漢字でよいけれど、Kuromojiの解析上区別できない。
+                           new SentenceExtractor(conf.getSymbolTable()),
+                           conf.getTokenizer())
+     
+    // exercise
+    def errors = (new RedPen(conf)).validate([doc]).get(doc)
+     
+    // verify
+    assertThat errors.size(), is(2)
+    assertThat errors.get(0).getMessage(), is("[unsuggested-kanji.js] 推奨しない漢字が「通り」で使われています。")
+    assertThat errors.get(1).getMessage(), is("[unsuggested-kanji.js] 推奨しない漢字が「通り」で使われています。")
+  }
+  
+  @Test 
+  void test_not_check_通り() {
+    // setup
+    def parser = DocumentParser.PLAIN
+    def doc = parser.parse("大通りを通る。目抜き通りに向かう。青山通りを渡る。", 
+                           new SentenceExtractor(conf.getSymbolTable()),
+                           conf.getTokenizer())
+     
+    // exercise
+    def errors = (new RedPen(conf)).validate([doc]).get(doc)
+     
+    // verify
+    assertThat errors.size(), is(0)
+  }  
+  
+  @Test 
   void test_check_得る() {
     // setup
     def parser = DocumentParser.PLAIN
